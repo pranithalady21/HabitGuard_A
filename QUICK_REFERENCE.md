@@ -8,7 +8,7 @@ A full-stack habit tracking application that detects suspicious user behavior an
 ### Tech Stack
 - **Backend**: Node.js + Express + MongoDB + Mongoose
 - **Frontend**: React + Axios + CSS3
-- **Deployment**: Railway (backend) + Netlify (frontend)
+- **Deployment**: Cloud Hosting
 
 ---
 
@@ -42,14 +42,14 @@ HabitGuard/
 ```bash
 npm install
 npm start
-# Open: http://localhost:5000
+# Open: http://localhost:3000
 ```
 
 ### Start Frontend
 ```bash
 cd frontend
 npm install
-echo "REACT_APP_API_URL=http://localhost:5000/api" > .env
+echo "REACT_APP_API_URL=http://localhost:3000/api" > .env
 npm start
 # Open: http://localhost:3000
 ```
@@ -121,25 +121,8 @@ App.js
 
 ---
 
-## 🚀 3-Step Deployment
-
-### 1. Deploy Backend (Railway)
-```
-1. Push code to GitHub
-2. Go to railway.app
-3. Deploy from GitHub
-4. Add MongoDB URI to environment
-5. Get backend URL
-```
-
-### 2. Deploy Frontend (Netlify)
-```
-1. Go to netlify.com
-2. Deploy from GitHub
-3. Set base: frontend, build: npm run build
-4. Add REACT_APP_API_URL env variable
-5. Get frontend URL
-```
+### 1. Cloud Deployment
+Push code to your preferred cloud hosting provider and configure environment variables.
 
 ### 3. Connect
 Frontend API URL → Backend URL
@@ -167,14 +150,14 @@ Frontend API URL → Backend URL
 
 ### Backend Environment (.env)
 ```
-PORT=5000
+PORT=3000
 MONGODB_URI=mongodb+srv://...
 NODE_ENV=production
 ```
 
 ### Frontend Environment (.env)
 ```
-REACT_APP_API_URL=http://localhost:5000/api
+REACT_APP_API_URL=http://localhost:3000/api
 ```
 
 ---
@@ -258,7 +241,7 @@ git log             # View history
 3. Read architecture (ARCHITECTURE.md)
 4. Modify code (controllers, components)
 5. Deploy (DEPLOYMENT_GUIDE.md)
-6. Monitor (Railway/Netlify dashboards)
+6. Monitor logs and metrics
 
 ---
 
@@ -283,13 +266,8 @@ Habit {
 ---
 
 ## 🌐 URLs (After Deployment)
-
-```
-Frontend:  https://habitguard.netlify.app
-Backend:   https://habitguard-*.railway.app
-API:       https://habitguard-*.railway.app/api
+Check your cloud provider dashboard for frontend and backend URLs.
 Database:  MongoDB Atlas cloud
-```
 
 ---
 
@@ -307,15 +285,14 @@ Database:  MongoDB Atlas cloud
 ---
 
 ## 🚀 Next: Deploy!
-
-See [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) for step-by-step instructions.
+Follow your cloud provider's instructions for deployment.
 
 ---
 
 **Quick Links**
 - [Backend Setup](QUICK_START.md)
 - [Frontend Setup](frontend/README.md)
-- [Deploy Now](DEPLOYMENT_GUIDE.md)
+- [Deploy Now](README.md)
 - [Test APIs](API_EXAMPLES.md)
 - [Architecture](ARCHITECTURE.md)
 

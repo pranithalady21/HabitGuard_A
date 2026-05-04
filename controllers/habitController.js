@@ -114,7 +114,15 @@ const detectSuspiciousBehavior = (datesCompleted) => {
  */
 const addHabit = async (req, res) => {
   try {
-    const { title, userId } = req.body;
+    const { 
+      title, 
+      userId, 
+      category, 
+      goalDuration, 
+      reminderTime, 
+      startDate, 
+      targetDate 
+    } = req.body;
 
     if (!title || !userId) {
       return res.status(400).json({
@@ -126,6 +134,11 @@ const addHabit = async (req, res) => {
     const habit = new Habit({
       title,
       userId,
+      category: category || 'Other',
+      goalDuration: goalDuration || 0,
+      reminderTime: reminderTime || '',
+      startDate: startDate || new Date(),
+      targetDate: targetDate || null,
       datesCompleted: [],
       suspiciousActivities: [],
     });
@@ -383,6 +396,10 @@ const generateInsights = (datesCompleted, createdAt) => {
     currentStreak: 0,
     longestStreak: 0,
     averageCompletionsPerWeek: 0,
+    weeklyStats: {
+      thisWeekCount: 0,
+      bestDay: 'N/A'
+    },
     suggestion: '',
   };
 
@@ -395,40 +412,91 @@ const generateInsights = (datesCompleted, createdAt) => {
     .map(date => new Date(date).getTime())
     .sort((a, b) => a - b);
 
-  const now = new Date().getTime();
-  const daysSinceCreation = Math.floor((now - new Date(createdAt).getTime()) / (24 * 60 * 60 * 1000)) + 1;
+  const now = new Date();
+  const nowMs = now.getTime();
+  const daysSinceCreation = Math.floor((nowMs - new Date(createdAt).getTime()) / (24 * 60 * 60 * 1000)) + 1;
 
   // Calculate consistency score (0-100)
   insights.consistencyScore = Math.min(100, Math.round((insights.totalCompletions / Math.max(daysSinceCreation, 1)) * 100));
 
   // Calculate current streak
   const DAY_MS = 24 * 60 * 60 * 1000;
-  const TOLERANCE_MS = 2 * 60 * 60 * 1000;
-
-  let currentStreak = 1;
-  for (let i = timestamps.length - 1; i > 0; i--) {
-    const dayDifference = (timestamps[i] - timestamps[i - 1]) / DAY_MS;
-    if (dayDifference >= 0.9 && dayDifference <= 1.1) {
-      currentStreak++;
-    } else {
-      break;
+  
+  let currentStreak = 0;
+  const uniqueDates = [...new Set(datesCompleted.map(d => new Date(d).toDateString()))].sort((a, b) => new Date(b) - new Date(a));
+  
+  if (uniqueDates.length > 0) {
+    const lastDate = new Date(uniqueDates[0]);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    lastDate.setHours(0, 0, 0, 0);
+    
+    const diff = (today - lastDate) / DAY_MS;
+    
+    if (diff <= 1) { // Today or yesterday
+      currentStreak = 1;
+      for (let i = 0; i < uniqueDates.length - 1; i++) {
+        const d1 = new Date(uniqueDates[i]);
+        const d2 = new Date(uniqueDates[i+1]);
+        d1.setHours(0,0,0,0);
+        d2.setHours(0,0,0,0);
+        if ((d1 - d2) / DAY_MS === 1) {
+          currentStreak++;
+        } else {
+          break;
+        }
+      }
     }
   }
   insights.currentStreak = currentStreak;
 
   // Calculate longest streak
-  let longestStreak = 1;
-  let tempStreak = 1;
-  for (let i = 1; i < timestamps.length; i++) {
-    const dayDifference = (timestamps[i] - timestamps[i - 1]) / DAY_MS;
-    if (dayDifference >= 0.9 && dayDifference <= 1.1) {
-      tempStreak++;
-      longestStreak = Math.max(longestStreak, tempStreak);
-    } else {
-      tempStreak = 1;
+  let longestStreak = 0;
+  let tempStreak = 0;
+  const sortedUniqueDates = [...new Set(datesCompleted.map(d => new Date(d).toDateString()))].sort((a, b) => new Date(a) - new Date(b));
+
+  if (sortedUniqueDates.length > 0) {
+    tempStreak = 1;
+    longestStreak = 1;
+    for (let i = 1; i < sortedUniqueDates.length; i++) {
+      const d1 = new Date(sortedUniqueDates[i-1]);
+      const d2 = new Date(sortedUniqueDates[i]);
+      d1.setHours(0,0,0,0);
+      d2.setHours(0,0,0,0);
+      if ((d2 - d1) / DAY_MS === 1) {
+        tempStreak++;
+        longestStreak = Math.max(longestStreak, tempStreak);
+      } else {
+        tempStreak = 1;
+      }
     }
   }
   insights.longestStreak = longestStreak;
+
+  // Calculate weekly stats
+  const startOfWeek = new Date(now);
+  startOfWeek.setDate(now.getDate() - now.getDay());
+  startOfWeek.setHours(0, 0, 0, 0);
+  
+  const thisWeekDates = datesCompleted.filter(d => new Date(d) >= startOfWeek);
+  insights.weeklyStats.thisWeekCount = thisWeekDates.length;
+  
+  const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const dayCounts = {};
+  datesCompleted.forEach(d => {
+    const day = dayNames[new Date(d).getDay()];
+    dayCounts[day] = (dayCounts[day] || 0) + 1;
+  });
+  
+  let bestDay = 'N/A';
+  let maxCount = 0;
+  for (const day in dayCounts) {
+    if (dayCounts[day] > maxCount) {
+      maxCount = dayCounts[day];
+      bestDay = day;
+    }
+  }
+  insights.weeklyStats.bestDay = bestDay;
 
   // Calculate average completions per week
   const weeksActive = Math.max(1, Math.ceil(daysSinceCreation / 7));
@@ -442,7 +510,7 @@ const generateInsights = (datesCompleted, createdAt) => {
   } else if (insights.consistencyScore >= 40) {
     insights.suggestion = '📈 You\'re doing okay. Try to be more consistent!';
   } else if (insights.currentStreak > 0) {
-    insights.suggestion = '💪 You\'re on a ' + insights.currentStreak + ' day streak! Keep going!';
+    insights.suggestion = `💪 You're on a ${insights.currentStreak} day streak! Keep going!`;
   } else {
     insights.suggestion = '🚀 Start building your streak today!';
   }

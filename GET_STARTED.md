@@ -175,22 +175,7 @@ curl http://localhost:5000/api/habits/{habitId}/insights
 
 ## 🚀 Production Deployment
 
-### Phase 1: Prepare for Deployment
-
-```bash
-# 1. Push code to GitHub
-git add .
-git commit -m "Full-stack HabitGuard app ready for deployment"
-git push origin main
-
-# 2. Test that everything works locally
-npm start          # backend
-# In another terminal:
-cd frontend
-npm start          # frontend
-```
-
-### Phase 2: Deploy Backend on Railway
+Prepare your backend and frontend for production by pushing to a cloud provider and setting the necessary environment variables.
 
 **Step-by-step**:
 
@@ -207,7 +192,7 @@ npm start          # frontend
    - Go to "Variables" tab
    - Add:
    ```
-   PORT=5000
+   PORT=3000
    NODE_ENV=production
    MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/habitguard?retryWrites=true&w=majority
    ```
@@ -304,12 +289,12 @@ rm -rf node_modules
 npm install
 ```
 
-**Error**: "Port 5000 already in use"
+**Error**: "Port 3000 already in use"
 
 ```bash
-# Solution 1: Kill process on port 5000
+# Solution 1: Kill process on port 3000
 # On Windows:
-netstat -ano | findstr :5000
+netstat -ano | findstr :3000
 taskkill /PID {PID} /F
 
 # Solution 2: Change port in .env
@@ -343,10 +328,10 @@ npm install
 
 ```bash
 # Create .env file
-echo REACT_APP_API_URL=http://localhost:5000/api > .env
+echo REACT_APP_API_URL=http://localhost:3000/api > .env
 
 # Or on Windows:
-echo REACT_APP_API_URL=http://localhost:5000/api > .env
+echo REACT_APP_API_URL=http://localhost:3000/api > .env
 ```
 
 ### API Connection Issues
@@ -355,11 +340,11 @@ echo REACT_APP_API_URL=http://localhost:5000/api > .env
 
 ```bash
 # 1. Verify backend is running
-curl http://localhost:5000/
+curl http://localhost:3000/
 
 # 2. Check API URL is correct
 # frontend/.env should have:
-REACT_APP_API_URL=http://localhost:5000/api
+REACT_APP_API_URL=http://localhost:3000/api
 
 # 3. For production, update to:
 REACT_APP_API_URL=https://your-railway-url/api
@@ -384,10 +369,10 @@ REACT_APP_API_URL=https://your-railway-url/api
 ```bash
 # 1. Verify User ID is entered
 # 2. Check if habits exist:
-curl http://localhost:5000/api/habits/demo_user_1
+curl http://localhost:3000/api/habits/demo_user_1
 
 # 3. If no response, create a habit:
-curl -X POST http://localhost:5000/api/habits \
+curl -X POST http://localhost:3000/api/habits \
   -H "Content-Type: application/json" \
   -d '{"title":"Test","userId":"demo_user_1"}'
 ```
@@ -410,7 +395,7 @@ curl -X POST http://localhost:5000/api/habits \
 # Go to Project → Settings → Logs
 
 # 2. Verify .env variables are set:
-PORT=5000
+PORT=3000
 NODE_ENV=production
 MONGODB_URI=...
 
@@ -473,11 +458,8 @@ npm run build
 - [ ] Insights display correctly
 - [ ] Rapid complete test shows warning
 - [ ] Delete habit works
-- [ ] Backend deployed on Railway
-- [ ] Frontend deployed on Netlify
-- [ ] Production frontend connects to production backend
-- [ ] API calls work in production
-- [ ] Data persists across sessions
+- [ ] Backend deployed successfully
+- [ ] Frontend deployed successfully
 
 ---
 
@@ -523,8 +505,8 @@ npm run build
 You now have a fully functional, production-ready habit tracking application!
 
 ```
-Frontend: https://habitguard.netlify.app
-Backend:  https://habitguard-*.railway.app
+Frontend: Cloud URL
+Backend:  Cloud URL
 Database: MongoDB (Cloud or Local)
 ```
 

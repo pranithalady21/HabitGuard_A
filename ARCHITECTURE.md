@@ -15,9 +15,6 @@ HabitGuard/
 ├── routes/
 │   └── habitRoutes.js              # API route definitions
 ├── server.js                       # Express app & server setup
-├── package.json                    # Dependencies & scripts
-├── .env                            # Environment variables
-├── .gitignore                      # Git ignore rules
 ├── README.md                       # Complete documentation
 ├── QUICK_START.md                  # Setup instructions
 ├── API_EXAMPLES.md                 # Test cases
@@ -101,6 +98,11 @@ Return response with warnings
   _id: ObjectId,                    // MongoDB auto-generated ID
   title: String,                    // Habit name (required)
   userId: String,                   // User identifier (required)
+  category: String,                 // Fitness, Study, Health, Other
+  goalDuration: Number,             // Target time in minutes
+  reminderTime: String,             // HH:mm reminder format
+  startDate: Date,                  // Start tracking date
+  targetDate: Date,                 // Completion goal date
   datesCompleted: [Date],           // Array of completion timestamps
   suspiciousActivities: [           // Array of detected anomalies
     {
@@ -110,7 +112,7 @@ Return response with warnings
     }
   ],
   createdAt: Date,                  // Habit creation time (auto)
-  updatedAt: Date,                  // Last update time (auto)
+  updatedAt: Date                   // Last update time (auto)
 }
 ```
 
@@ -118,15 +120,15 @@ Return response with warnings
 
 ### Create Habit (POST /api/habits)
 ```
-Request: {title, userId}
+Request: {title, userId, category, goalDuration, reminderTime, startDate, targetDate}
     ↓
 Validation (title & userId required)
     ↓
-Create Habit document
+Create Habit document with categorization and goals
     ↓
 Save to MongoDB
     ↓
-Response: Created habit object
+Response: Created habit object with default insights
 ```
 
 ### Mark Complete (POST /api/habits/:habitId/complete)
@@ -261,7 +263,7 @@ Total detection time: O(n) where n = number of completions
 Edit `config/detectionConfig.js`:
 ```javascript
 rapidUpdates: {
-  timeWindowMs: 5 * 60 * 1000,  // Change to 10 minutes
+  timeWindowMs: 5 * 60 * 3000,  // Change to 10 minutes
   maxUpdatesInWindow: 5,         // Change to 10 updates
 }
 
@@ -377,5 +379,5 @@ Simulate:
 
 ---
 
-**Last Updated**: May 3, 2026
-**Version**: 1.0.0
+**Last Updated**: May 5, 2026
+**Version**: 1.2.0 (Advanced Features Edition)

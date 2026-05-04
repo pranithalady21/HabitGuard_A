@@ -140,17 +140,7 @@ app.delete('/api/habits/:id', async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-
-  // Keep-alive ping for Render free tier (prevents spin-down)
-  if (process.env.NODE_ENV === 'production') {
-    const RENDER_URL = process.env.RENDER_EXTERNAL_URL || 'https://habitguard-backend.onrender.com';
-    setInterval(() => {
-      fetch(`${RENDER_URL}/`)
-        .then(() => console.log('Keep-alive ping sent'))
-        .catch(err => console.error('Keep-alive failed:', err.message));
-    }, 14 * 60 * 1000); // ping every 14 minutes
-  }
 });

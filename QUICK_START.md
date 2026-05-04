@@ -26,7 +26,7 @@ npm install
 // ============================================
 // .env file is already created with default values:
 // 
-// PORT=5000
+// PORT=3000
 // MONGODB_URI=mongodb://localhost:27017/habitguard
 // NODE_ENV=development
 //
@@ -55,7 +55,7 @@ npm start
 npm run dev
 
 // You should see:
-// Server is running on port 5000
+// Server is running on port 3000
 // MongoDB Connected: localhost
 
 // ============================================
@@ -63,14 +63,14 @@ npm run dev
 // ============================================
 
 // Test 1: Health check
-// GET http://localhost:5000/api/health
+// GET http://localhost:3000/api/health
 
 // Test 2: Create a new habit
-// POST http://localhost:5000/api/habits
+// POST http://localhost:3000/api/habits
 // Body: {"title":"Morning Exercise","userId":"user123"}
 
 // Test 3: Get all habits
-// GET http://localhost:5000/api/habits/user123
+// GET http://localhost:3000/api/habits/user123
 
 // See API_EXAMPLES.md for more test cases
 
@@ -85,7 +85,7 @@ npm run dev
 
 // models/Habit.js
 // - Defines the Habit schema using Mongoose
-// - Fields: title, userId, datesCompleted, suspiciousActivities, timestamps
+// - Fields: title, userId, category, goalDuration, reminderTime, datesCompleted, suspiciousActivities
 // - Schema validation and default values
 
 // controllers/habitController.js
@@ -136,10 +136,10 @@ npm run dev
 // - Try local: mongodb://localhost:27017/habitguard
 // - Try cloud: Get URI from MongoDB Atlas dashboard
 
-// Issue 2: "Port 5000 is already in use"
+// Issue 2: "Port 3000 is already in use"
 // Solution:
 // - Change PORT in .env to different value (e.g., 5001, 3000)
-// - Or kill process using port 5000
+// - Or kill process using port 3000
 
 // Issue 3: "Cannot find module 'express'"
 // Solution:
@@ -175,12 +175,12 @@ npm run dev
 // NEXT STEPS
 // ============================================
 
-// 1. Test all API endpoints using provided examples
-// 2. Modify detection thresholds for your use case
-// 3. Add user authentication (JWT tokens)
-// 4. Implement frontend to visualize habits
-// 5. Add analytics and reporting features
-// 6. Deploy to production (Heroku, AWS, etc.)
+// 1. Explore categories and organization
+// 2. Set habit goals (mins) and test the interactive timer
+// 3. Test browser notifications for reminders
+// 4. View consistency scores and weekly performance insights
+// 5. Add user authentication (JWT tokens)
+// 6. Deploy to production (Cloud Hosting)
 
 // See README.md for detailed API documentation
 // See API_EXAMPLES.md for complete test cases

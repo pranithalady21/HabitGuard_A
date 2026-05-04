@@ -5,8 +5,13 @@ A Node.js Express server with MongoDB and Mongoose for tracking habits while det
 ## Features
 
 - **CRUD Operations**: Create, read, update, and delete habits
-- **Completion Tracking**: Mark habits as completed with timestamp tracking
-- **Suspicious Behavior Detection**: Identifies anomalies in habit completion patterns
+- **Advanced Completion Tracking**: Mark habits as completed with timestamp tracking and streak calculation
+- **🔥 Streaks & Consistency**: Real-time current/best streaks and consistency percentage scores
+- **🎯 Goal Tracking & Timer**: Set time goals (mins) and use an interactive countdown timer
+- **🛡️ Suspicious Behavior Detection**: Identifies anomalies (rapid updates, unrealistic streaks, etc.)
+- **🔔 Reminders**: Integrated Browser Notification API for habit alerts
+- **🔍 Organization**: Filter and sort habits by category (Fitness, Study, Health, Other) and status
+- **📊 Weekly Insights**: Dynamic performance summaries and smart suggestions
 - **MongoDB Integration**: Persistent data storage using Mongoose ODM
 
 ## Project Structure
@@ -57,8 +62,12 @@ HabitGuard/
 Request body:
 ```json
 {
-  "title": "Morning Exercise",
-  "userId": "user123"
+  "title": "Study Algorithm",
+  "userId": "user123",
+  "category": "Study",
+  "goalDuration": 45,
+  "reminderTime": "09:00",
+  "startDate": "2024-05-01"
 }
 ```
 
@@ -211,18 +220,22 @@ The system detects four types of suspicious patterns:
 
 ```javascript
 {
-  title: String (required, max 100 chars),
+  title: String (required),
   userId: String (required),
-  datesCompleted: Array of Dates (default: []),
-  createdAt: Date (default: current date),
-  updatedAt: Date (auto-updated),
+  category: String (Fitness, Study, Health, Other),
+  goalDuration: Number (minutes),
+  reminderTime: String (HH:mm),
+  startDate: Date,
+  targetDate: Date,
+  datesCompleted: Array of Dates,
   suspiciousActivities: [
     {
       type: String,
       message: String,
       detectedAt: Date
     }
-  ]
+  ],
+  createdAt: Date
 }
 ```
 
@@ -231,7 +244,7 @@ The system detects four types of suspicious patterns:
 Create a `.env` file in the root directory:
 
 ```
-PORT=5000
+PORT=3000
 MONGODB_URI=mongodb://localhost:27017/habitguard
 NODE_ENV=development
 ```
@@ -251,21 +264,21 @@ NODE_ENV=development
 
 ```bash
 # 1. Create a habit
-curl -X POST http://localhost:5000/api/habits \
+curl -X POST http://localhost:3000/api/habits \
   -H "Content-Type: application/json" \
   -d '{"title":"Morning Run","userId":"user123"}'
 
 # Response: {"_id": "507f1f77bcf86cd799439011", ...}
 
 # 2. Mark it as completed
-curl -X POST http://localhost:5000/api/habits/507f1f77bcf86cd799439011/complete \
+curl -X POST http://localhost:3000/api/habits/507f1f77bcf86cd799439011/complete \
   -H "Content-Type: application/json"
 
 # 3. Get all habits
-curl http://localhost:5000/api/habits/user123
+curl http://localhost:3000/api/habits/user123
 
 # 4. View suspicious activities
-curl http://localhost:5000/api/habits/507f1f77bcf86cd799439011/suspicious-activities
+curl http://localhost:3000/api/habits/507f1f77bcf86cd799439011/suspicious-activities
 ```
 
 ## Error Handling
@@ -290,10 +303,8 @@ All endpoints return consistent error responses:
 
 ## Future Enhancements
 
-- User authentication and authorization
-- Advanced analytics dashboard
-- Configurable detection thresholds per user
-- Email notifications for suspicious activities
-- Habit categories and tags
+- User authentication and authorization (JWT)
+- Advanced data visualization charts
 - Social features and habit sharing
-- Mobile app integration
+- Mobile app integration (React Native)
+- Cloud deployment optimizations

@@ -8,12 +8,16 @@
 // ============================================
 // 1. CREATE A NEW HABIT
 // ============================================
-// POST http://localhost:5000/api/habits
+// POST http://localhost:3000/api/habits
 // Content-Type: application/json
 
 {
   "title": "Morning Jog",
-  "userId": "user123"
+  "userId": "user123",
+  "category": "Fitness",
+  "goalDuration": 20,
+  "reminderTime": "07:00",
+  "startDate": "2024-05-01"
 }
 
 // Expected Response:
@@ -33,7 +37,7 @@
 // ============================================
 // 2. GET ALL HABITS FOR A USER
 // ============================================
-// GET http://localhost:5000/api/habits/user123
+// GET http://localhost:3000/api/habits/user123
 
 // Expected Response:
 // {
@@ -54,12 +58,12 @@
 // ============================================
 // 3. GET SINGLE HABIT
 // ============================================
-// GET http://localhost:5000/api/habits/detail/507f1f77bcf86cd799439011
+// GET http://localhost:3000/api/habits/detail/507f1f77bcf86cd799439011
 
 // ============================================
 // 4. MARK HABIT AS COMPLETED (NORMAL)
 // ============================================
-// POST http://localhost:5000/api/habits/507f1f77bcf86cd799439011/complete
+// POST http://localhost:3000/api/habits/507f1f77bcf86cd799439011/complete
 // Content-Type: application/json
 
 {
@@ -83,7 +87,7 @@
 // 5. TEST RAPID_UPDATES DETECTION
 // ============================================
 // Scenario: Mark habit as completed 5+ times in 5 minutes
-// POST http://localhost:5000/api/habits/507f1f77bcf86cd799439011/complete
+// POST http://localhost:3000/api/habits/507f1f77bcf86cd799439011/complete
 // Content-Type: application/json
 
 // Call 1: Base time
@@ -119,7 +123,7 @@
 // 6. TEST DUPLICATE_TIMESTAMPS DETECTION
 // ============================================
 // Scenario: Mark habit with same exact timestamp 3+ times
-// POST http://localhost:5000/api/habits/507f1f77bcf86cd799439011/complete
+// POST http://localhost:3000/api/habits/507f1f77bcf86cd799439011/complete
 // Content-Type: application/json
 
 // Same timestamp for all calls (SHOULD TRIGGER WARNING)
@@ -131,7 +135,7 @@
 // 7. TEST UNREALISTIC_STREAK DETECTION
 // ============================================
 // Scenario: Create 31+ consecutive daily completions
-// POST http://localhost:5000/api/habits/507f1f77bcf86cd799439011/complete
+// POST http://localhost:3000/api/habits/507f1f77bcf86cd799439011/complete
 
 // Simulate 31 days of perfect daily completions
 // Day 1-31, each day at 08:00 with minimal time drift
@@ -145,7 +149,7 @@
 // 8. TEST UNUSUAL_TIME_PATTERN DETECTION
 // ============================================
 // Scenario: Multiple completions at same time of day
-// POST http://localhost:5000/api/habits/507f1f77bcf86cd799439011/complete
+// POST http://localhost:3000/api/habits/507f1f77bcf86cd799439011/complete
 
 // All at 09:00 (SHOULD TRIGGER WARNING after 5+ entries)
 { "completionDate": "2024-01-15T09:00:00Z" }
@@ -157,7 +161,7 @@
 // ============================================
 // 9. UPDATE HABIT TITLE
 // ============================================
-// PUT http://localhost:5000/api/habits/507f1f77bcf86cd799439011
+// PUT http://localhost:3000/api/habits/507f1f77bcf86cd799439011
 // Content-Type: application/json
 
 {
@@ -167,7 +171,7 @@
 // ============================================
 // 10. GET SUSPICIOUS ACTIVITIES
 // ============================================
-// GET http://localhost:5000/api/habits/507f1f77bcf86cd799439011/suspicious-activities
+// GET http://localhost:3000/api/habits/507f1f77bcf86cd799439011/suspicious-activities
 
 // Expected Response:
 // {
@@ -194,27 +198,27 @@
 // ============================================
 // 11. DELETE A HABIT
 // ============================================
-// DELETE http://localhost:5000/api/habits/507f1f77bcf86cd799439011
+// DELETE http://localhost:3000/api/habits/507f1f77bcf86cd799439011
 
 // ============================================
 // CURL EXAMPLES
 // ============================================
 
 // Create a habit
-// curl -X POST http://localhost:5000/api/habits \
+// curl -X POST http://localhost:3000/api/habits \
 //   -H "Content-Type: application/json" \
 //   -d '{"title":"Morning Jog","userId":"user123"}'
 
 // Get all habits
-// curl http://localhost:5000/api/habits/user123
+// curl http://localhost:3000/api/habits/user123
 
 // Mark as completed
-// curl -X POST http://localhost:5000/api/habits/HABIT_ID/complete \
+// curl -X POST http://localhost:3000/api/habits/HABIT_ID/complete \
 //   -H "Content-Type: application/json" \
 //   -d '{"completionDate":"2024-01-15T08:00:00Z"}'
 
 // Get suspicious activities
-// curl http://localhost:5000/api/habits/HABIT_ID/suspicious-activities
+// curl http://localhost:3000/api/habits/HABIT_ID/suspicious-activities
 
 // Delete habit
-// curl -X DELETE http://localhost:5000/api/habits/HABIT_ID
+// curl -X DELETE http://localhost:3000/api/habits/HABIT_ID

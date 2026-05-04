@@ -4,9 +4,11 @@
 
 HabitGuard is a complete full-stack habit tracking application with:
 - ✅ Node.js/Express backend with MongoDB
-- ✅ React frontend with modern UI
+- ✅ Premium React frontend with glassmorphism UI
 - ✅ Sophisticated suspicious behavior detection
-- ✅ Real-time insights and analytics
+- ✅ Real-time insights, streaks, and consistency scores
+- ✅ Goal tracking with interactive timers
+- ✅ Browser notifications for habit reminders
 - ✅ Production-ready deployment setup
 
 ---
@@ -114,6 +116,10 @@ frontend/
   currentStreak: number,         // Current consecutive days
   longestStreak: number,         // Best streak ever
   averageCompletionsPerWeek: number,  // Weekly average
+  weeklyStats: {
+    thisWeekCount: number,       // Completions this week
+    bestDay: string              // Best performing day
+  },
   suggestion: string             // AI-generated motivation message
 }
 ```
@@ -180,8 +186,6 @@ frontend/
 - **LocalStorage** API
 
 ### Deployment
-- **Railway** for backend hosting
-- **Netlify** for frontend hosting
 - **GitHub** for version control
 - **MongoDB Atlas** for database
 
@@ -200,7 +204,7 @@ npm install
 
 # 3. Start server
 npm start
-# Server runs on http://localhost:5000
+# Server runs on http://localhost:3000
 ```
 
 ### Frontend Setup (5 minutes)
@@ -213,7 +217,7 @@ cd frontend
 npm install
 
 # 3. Create .env file
-echo "REACT_APP_API_URL=http://localhost:5000/api" > .env
+echo "REACT_APP_API_URL=http://localhost:3000/api" > .env
 
 # 4. Start development server
 npm start
@@ -231,38 +235,7 @@ npm start
 ---
 
 ## 🌐 Deployment (Production)
-
-### Backend on Railway (10 minutes)
-
-1. **Push code to GitHub**
-2. **Go to Railway**: https://railway.app/dashboard
-3. **Create project** from GitHub
-4. **Set environment variables**:
-   - `MONGODB_URI`: MongoDB Atlas connection string
-   - `NODE_ENV`: `production`
-5. **Deploy** - Auto-deploys on git push
-6. **Get URL**: e.g., `https://habitguard-production.railway.app`
-
-### Frontend on Netlify (10 minutes)
-
-1. **Go to Netlify**: https://app.netlify.com
-2. **Deploy from Git** → Select GitHub repo
-3. **Configure build**:
-   - Base: `frontend`
-   - Build: `npm run build`
-   - Publish: `frontend/build`
-4. **Set environment variable**:
-   - `REACT_APP_API_URL`: Your Railway backend URL
-5. **Deploy** - Auto-deploys on git push
-6. **Get URL**: e.g., `https://habitguard.netlify.app`
-
-### Result
-- ✅ Backend live on Railway
-- ✅ Frontend live on Netlify
-- ✅ Connected and working
-- ✅ Auto-deploy on git push
-
-See [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) for detailed instructions.
+See relevant cloud hosting documentation for deployment instructions.
 
 ---
 
@@ -392,7 +365,7 @@ UI Re-render
 | API connection error | Check backend is running, verify API URL |
 | Habits not loading | Verify User ID is set, check Network tab |
 | "Cannot find module" | Run `npm install` in root and frontend |
-| Port 5000 in use | Kill process or change PORT in .env |
+| Port 3000 in use | Kill process or change PORT in .env |
 | Deployment fails on Railway | Check package.json, verify MongoDB URI |
 | Frontend blank on Netlify | Check REACT_APP_API_URL, clear cache |
 
@@ -432,9 +405,8 @@ See [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md#troubleshooting) for more.
    - Adjust detection thresholds in `config/detectionConfig.js`
    - Add features in controllers and components
 
-5. **Deploy**
-   - Follow [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)
-   - Go live on Railway + Netlify
+5. Deploy
+   - Go live on Cloud Hosting
 
 ---
 
@@ -482,7 +454,7 @@ See [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md#troubleshooting) for more.
 - **Backend Code**: ~500 lines (controllers + routes)
 - **Frontend Code**: ~400 lines (components + API)
 - **CSS Styling**: ~800 lines (responsive design)
-- **Documentation**: ~5000 lines (comprehensive)
+- **Documentation**: ~3000 lines (comprehensive)
 - **Total Files**: 30+
 - **Dependencies**: 15 (backend) + 5 (frontend)
 
@@ -513,7 +485,7 @@ MIT License - Feel free to use and modify for personal or commercial projects.
 2. **Follow** [QUICK_START.md](QUICK_START.md)
 3. **Run locally** and test features
 4. **Customize** based on your needs
-5. **Deploy** using [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)
+5. Deploy to production
 6. **Share** with others
 
 ---
@@ -526,9 +498,9 @@ MIT License - Feel free to use and modify for personal or commercial projects.
 
 ---
 
-**Version**: 1.0.0
+**Version**: 1.2.0
 **Status**: ✅ Production Ready
-**Last Updated**: May 3, 2026
+**Last Updated**: May 5, 2026
 
 ---
 

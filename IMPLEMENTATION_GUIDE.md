@@ -78,18 +78,18 @@ npm install
 ### Step 3: Start the Server
 ```bash
 npm start
-# Output: Server is running on port 5000
+# Output: Server is running on port 3000
 ```
 
 ### Step 4: Test an API Endpoint
 ```bash
-curl http://localhost:5000/api/health
+curl http://localhost:3000/api/health
 # Response: {"status":"Server is running"}
 ```
 
 ### Step 5: Create Your First Habit
 ```bash
-curl -X POST http://localhost:5000/api/habits \
+curl -X POST http://localhost:3000/api/habits \
   -H "Content-Type: application/json" \
   -d '{"title":"Morning Jog","userId":"user123"}'
 ```
@@ -240,7 +240,7 @@ See [API_EXAMPLES.md](API_EXAMPLES.md) for complete test cases with curl command
 | Issue | Solution |
 |-------|----------|
 | MongoDB connection error | Check if MongoDB is running, verify MONGODB_URI in .env |
-| Port 5000 already in use | Change PORT in .env or kill process on port 5000 |
+| Port 3000 already in use | Change PORT in .env or kill process on port 3000 |
 | Cannot find module 'express' | Run `npm install` |
 | No detection warnings appearing | Check detection thresholds in config/detectionConfig.js |
 | Suspicious activities not saved | Verify MongoDB connection and database permissions |
@@ -257,7 +257,7 @@ git push heroku main
 ### AWS/DigitalOcean
 ```bash
 # Set environment variables on server
-export PORT=5000
+export PORT=3000
 export MONGODB_URI=mongodb://...
 npm start
 ```
@@ -348,7 +348,7 @@ To extend HabitGuard:
 
 1. ✅ Run setup: `npm install`
 2. ✅ Start server: `npm start`
-3. ✅ Test health: `curl http://localhost:5000/api/health`
+3. ✅ Test health: `curl http://localhost:3000/api/health`
 4. ✅ Create habit: See API_EXAMPLES.md
 5. ✅ Mark as completed: Test detection features
 6. ✅ Customize thresholds: Edit config/detectionConfig.js
