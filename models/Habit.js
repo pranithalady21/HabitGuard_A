@@ -4,6 +4,8 @@ const HabitSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
+    trim: true,
+    maxlength: 100
   },
   userId: {
     type: String,
@@ -17,10 +19,11 @@ const HabitSchema = new mongoose.Schema({
   },
   goalDuration: {
     type: Number, // in minutes
-    default: 0
+    default: 0,
+    min: 0
   },
   reminderTime: {
-    type: String, // HH:mm
+    type: String, // HH:mm format
     default: ''
   },
   startDate: {
@@ -32,7 +35,7 @@ const HabitSchema = new mongoose.Schema({
   },
   datesCompleted: {
     type: [Date],
-    default: [],
+    default: []
   },
   suspiciousActivities: [
     {
@@ -43,7 +46,7 @@ const HabitSchema = new mongoose.Schema({
   ],
   createdAt: {
     type: Date,
-    default: Date.now,
+    default: Date.now
   }
 });
 
