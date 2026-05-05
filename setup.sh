@@ -16,17 +16,13 @@ fi
 echo "✅ Node.js is installed: $(node --version)"
 echo ""
 
-# Check if MongoDB is running (optional warning)
-if ! command -v mongod &> /dev/null; then
-    echo "⚠️  MongoDB doesn't appear to be installed."
-    echo "   Please ensure MongoDB is running on localhost:27017"
-    echo "   Or update MONGODB_URI in .env for remote connection"
-    echo ""
-fi
-
-# Install dependencies
-echo "📦 Installing dependencies..."
+# Install Backend dependencies
+echo "📦 Installing backend dependencies..."
 npm install
+
+# Install Frontend dependencies
+echo "📦 Installing frontend dependencies..."
+cd frontend && npm install && cd ..
 
 if [ $? -ne 0 ]; then
     echo "❌ Failed to install dependencies"
@@ -40,8 +36,8 @@ echo ""
 if [ ! -f ".env" ]; then
     echo "📝 Creating .env file..."
     cat > .env << EOF
-PORT=5000
-MONGODB_URI=mongodb://localhost:27017/habitguard
+PORT=3000
+MONGODB_URI=mongodb://localhost:27017/habitguard_A
 NODE_ENV=development
 EOF
     echo "✅ .env file created"
@@ -56,13 +52,12 @@ echo "================================"
 echo ""
 echo "Next steps:"
 echo "1. Ensure MongoDB is running"
-echo "2. Start the server: npm start"
-echo "3. Test API: GET http://localhost:5000/api/health"
-echo "4. See API_EXAMPLES.md for test cases"
+echo "2. Start Backend: npm run dev"
+echo "3. Start Frontend: cd frontend && npm start"
+echo "4. Health Check: http://localhost:3000"
 echo ""
 echo "Documentation:"
-echo "- README.md - Full API documentation"
-echo "- QUICK_START.md - Detailed setup guide"
-echo "- ARCHITECTURE.md - Architecture and design"
-echo "- API_EXAMPLES.md - Test cases and examples"
+echo "- README.md - Overview"
+echo "- GET_STARTED.md - Full Guide"
+echo "- QUICK_START.md - 2-Min Setup"
 echo ""

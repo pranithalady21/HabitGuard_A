@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { API_BASE_URL } from './config';
+import { API_BASE_URL, DEFAULT_USER_ID } from './config';
 import './App.css';
 
 function App() {
@@ -19,9 +19,24 @@ function App() {
   const [sort, setSort] = useState('Newest');
   const [activeTimers, setActiveTimers] = useState({});
 
+  const fetchHabits = async () => {
+    setIsLoading(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/habits/${DEFAULT_USER_ID}`);
+      const result = await res.json();
+      if (result.success) setHabits(result.data);
+      else showError(result.message);
+    } catch {
+      showError('Cannot connect to backend. Make sure the server is running on port 3000.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchHabits();
     requestNotificationPermission();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Filter & Sort effect
@@ -87,19 +102,8 @@ function App() {
     setTimeout(() => setError(''), duration);
   };
 
-  const fetchHabits = async () => {
-    setIsLoading(true);
-    try {
-      const res = await fetch(`${API_BASE_URL}/habits`);
-      const result = await res.json();
-      if (result.success) setHabits(result.data);
-      else showError(result.message);
-    } catch {
-      showError('Cannot connect to backend. Make sure the server is running on port 3000.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+
+
 
   const handleAddHabit = async (e) => {
     e.preventDefault();
@@ -108,7 +112,7 @@ function App() {
       const res = await fetch(`${API_BASE_URL}/habits`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...newHabit, userId: 'user123' })
+        body: JSON.stringify({ ...newHabit, userId: DEFAULT_USER_ID })
       });
       const result = await res.json();
       if (result.success) {

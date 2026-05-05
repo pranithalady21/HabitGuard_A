@@ -21,18 +21,15 @@ for /f "tokens=*" %%i in ('node --version') do set NODE_VERSION=%%i
 echo [OK] Node.js is installed: %NODE_VERSION%
 echo.
 
-REM Check if MongoDB is available
-where mongod >nul 2>nul
-if %ERRORLEVEL% NEQ 0 (
-    echo [!] MongoDB doesn't appear to be in PATH.
-    echo     Please ensure MongoDB is running on localhost:27017
-    echo     Or update MONGODB_URI in .env for remote connection
-    echo.
-)
-
-REM Install dependencies
-echo [*] Installing dependencies...
+REM Install Backend dependencies
+echo [*] Installing backend dependencies...
 call npm install
+
+REM Install Frontend dependencies
+echo [*] Installing frontend dependencies...
+cd frontend
+call npm install
+cd ..
 
 if %ERRORLEVEL% NEQ 0 (
     echo.
@@ -48,8 +45,8 @@ REM Create .env if it doesn't exist
 if not exist ".env" (
     echo [*] Creating .env file...
     (
-        echo PORT=5000
-        echo MONGODB_URI=mongodb://localhost:27017/habitguard
+        echo PORT=3000
+        echo MONGODB_URI=mongodb://localhost:27017/habitguard_A
         echo NODE_ENV=development
     ) > .env
     echo [OK] .env file created
@@ -59,19 +56,18 @@ if not exist ".env" (
 
 echo.
 echo ================================
-echo Setup Complete! ^^!
+echo Setup Complete! !!
 echo ================================
 echo.
 echo Next steps:
-echo 1. Ensure MongoDB is running
-echo 2. Start the server: npm start
-echo 3. Test API: GET http://localhost:5000/api/health
-echo 4. See API_EXAMPLES.md for test cases
+echo 1. Ensure MongoDB is running (Local or Atlas)
+echo 2. Start Backend: npm run dev
+echo 3. Start Frontend: cd frontend && npm start
+echo 4. Health Check: http://localhost:3000
 echo.
 echo Documentation:
-echo - README.md - Full API documentation
-echo - QUICK_START.md - Detailed setup guide
-echo - ARCHITECTURE.md - Architecture and design
-echo - API_EXAMPLES.md - Test cases and examples
+echo - README.md - Overview
+echo - GET_STARTED.md - Full Guide
+echo - QUICK_START.md - 2-Min Setup
 echo.
 pause
